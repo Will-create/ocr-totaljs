@@ -1,0 +1,48 @@
+@{meta('File upload')}
+
+<ui-component name="layout2" path="null" config="parent:window" class="invisible">
+	<div data-type="top" data-size="44">
+	</div>
+	<div data-type="left" data-size="30%,30%,30%,0">
+	</div>
+	<div data-type="right" data-size="30%,30%,30%,0">
+	</div>
+	<div data-type="main" data-scrollbar="visible:true" style="background-color:#ffff">
+		<div class="grid-1">
+			<ui-component name="input" path="form.language" config="dirsource:common.cl;dirkey:name;dirvalue:id">Language</ui-component>
+			<br>
+			<ui-component name="input" path="form.expand" config="type:checkbox">Expand</ui-component>
+			<br>
+			<ui-component name="button" path="null" config="exec:upload;icon:ti-cloud-upload" class="hidden">Upload</ui-component>
+		</div>
+		<br>
+
+		<div class="grid-1">
+			<ui-component name="objecttree" path="common.result"></ui-component>
+		</div>
+	</div>
+</ui-component>
+
+<script>
+	var common = {};
+	common.cl = [];
+	common.result;
+	var form = {};
+	form.language = 'en';
+	AJAX('GET /codelist/', 'common.cl');
+	
+	function upload() {
+
+		var model = GET('form');
+		var opt = {};
+		
+		opt.url = '/convert/' + QUERIFY(model);
+		console.log(model);
+		opt.callback = function(response) {
+			SET('common.result', response);
+		};
+
+
+		SETTER('upload', 'show', opt);
+	}
+</script>
